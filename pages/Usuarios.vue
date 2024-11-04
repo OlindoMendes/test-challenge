@@ -1,26 +1,36 @@
 <template>
-  <div>
-    <h1>Lista de Usuários</h1>
-    <input v-model="search" placeholder="Buscar por nome" />
-    <table>
-      <thead>
+  <div class="container mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6">Lista de Usuários</h1>
+    <input
+      v-model="search"
+      placeholder="Buscar por nome"
+      class="mb-4 p-2 border border-gray-300 rounded shadow-sm w-full"
+    />
+    <table
+      class="min-w-full bg-white border border-gray-200 shadow-md rounded-lg"
+    >
+      <thead class="bg-gray-50">
         <tr>
-          <th>Foto</th>
-          <th>Nome Completo</th>
-          <th>Data de Nascimento</th>
-          <th>Gênero</th>
-          <th>Localização</th>
+          <th class="py-3 px-6 text-left">Foto</th>
+          <th class="py-3 px-6 text-left">Nome Completo</th>
+          <th class="py-3 px-6 text-left">Data de Nascimento</th>
+          <th class="py-3 px-6 text-left">Gênero</th>
+          <th class="py-3 px-6 text-left">Localização</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in filterUsers" :key="user.id">
-          <td>
-            <img :src="user.image" :alt="user.firstName" class="user-image" />
+        <tr v-for="user in filterUsers" :key="user.id" class="border-t">
+          <td class="py-3 px-6">
+            <img
+              :src="user.image"
+              :alt="user.firstName"
+              class="w-12 h-12 rounded-full object-cover"
+            />
           </td>
-          <td>{{ user.firstName }} {{ user.lastName }}</td>
-          <td>{{ formatDate(user.birthDate) }}</td>
-          <td>{{ user.gender }}</td>
-          <td>
+          <td class="py-3 px-6">{{ user.firstName }} {{ user.lastName }}</td>
+          <td class="py-3 px-6">{{ formatDate(user.birthDate) }}</td>
+          <td class="py-3 px-6">{{ user.gender }}</td>
+          <td class="py-3 px-6">
             <a
               :href="
                 'https://www.google.com/maps?q=' +
@@ -29,6 +39,7 @@
                 user.address.longitude
               "
               target="_blank"
+              class="text-blue-600 hover:text-blue-800"
               >Ver no Mapa</a
             >
           </td>
