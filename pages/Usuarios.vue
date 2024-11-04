@@ -40,17 +40,25 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
+import { getUsers } from "../server/UsersAPI.js";
 
 const users = ref([]);
 const search = ref("");
 
 const fetchUsers = async () => {
-  fetch("https://dummyjson.com/users")
-    .then((res) => res.json())
-    .then((data) => {
-      users.value = data.users;
-      return users.value;
-    });
+  try {
+    const response = await getUsers();
+    if (!response.ok) {
+      throw new Error(
+        `Erro ao buscar usuários: ${response.status} ${response.statusText}`
+      );
+    }
+    const data = await response.json();
+    return (users.value = data.users);
+  } catch (error) {
+    console.error("Erro:", error);
+    throw error;
+  }
 };
 
 const filterUsers = computed(() => {

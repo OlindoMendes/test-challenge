@@ -187,41 +187,14 @@
         Cadastrar
       </button>
 
-      <!-- Modal para exibir as informações -->
-      <div
-        v-if="showModal"
-        class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      >
-        <div class="bg-white p-6 rounded shadow-lg">
-          <h2 class="text-lg font-bold mb-2">Informações Cadastradas</h2>
-          <p><strong>Nome:</strong> {{ form.fullName }}</p>
-          <p><strong>CPF:</strong> {{ form.cpf }}</p>
-          <p><strong>Data de Nascimento:</strong> {{ form.birthdate }}</p>
-          <p>
-            <strong>Pet:</strong> {{ form.petType }} <strong>Raça:</strong>
-            {{ form.petBreed }}
-          </p>
-          <p><strong>Renda mensal</strong> {{ form.monthlyIncome }}</p>
-          <p><strong>CEP:</strong> {{ form.cep }}</p>
-          <p>
-            <strong>Endereço:</strong> {{ form.street }}
-            <strong>Bairro:</strong> {{ form.neighborhood }}
-            <strong>Cidade:</strong> {{ form.city }} <strong>Estado:</strong>
-            {{ form.state }}
-          </p>
-          <button
-            @click="showModal = false"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-4 rounded"
-          >
-            Fechar
-          </button>
-        </div>
-      </div>
+      <ModalCadastroInfo :form="form" v-if="showModal" @close-modal="close" />
     </form>
   </div>
 </template>
 
 <script setup>
+import ModalCadastroInfo from "../components/ModalCadastroInfo.vue";
+import { getAddress } from "../server/CadastroAPI.js";
 import { ref, computed } from "vue";
 
 const form = ref({
@@ -260,8 +233,7 @@ const minDate = computed(() => {
 const breedOptions = ref([]);
 
 function validateCPF() {
-  // Lógica para validar CPF (exemplo simplificado)
-  isCPFValid.value = form.value.cpf.length === 11; // Apenas um exemplo simples
+  isCPFValid.value = form.value.cpf.length === 11;
 }
 
 function validateIncome() {
@@ -294,10 +266,8 @@ async function fetchAddress() {
   }
 
   try {
-    // Exemplo de chamada de API para buscar o endereço pelo CEP
-    const response = await fetch(
-      `https://viacep.com.br/ws/${form.value.cep}/json/`
-    );
+    const response = await getAddress(form.value.cep);
+
     const data = await response.json();
 
     if (data.erro) {
@@ -315,21 +285,20 @@ async function fetchAddress() {
   }
 }
 
+const close = (close) => {
+  showModal.value = close;
+};
+
 function handleSubmit() {
-  // Valida todos os campos antes de enviar
   if (
     isCPFValid.value &&
     isIncomeValid.value &&
     isCepValid.value &&
     isStateValid.value
   ) {
-    showModal.value = true; // Exibe o modal com os dados
+    showModal.value = true;
   } else {
     alert("Por favor, preencha todos os campos corretamente.");
   }
 }
 </script>
-
-<style scoped>
-/* Estilos personalizados, se necessário */
-</style>

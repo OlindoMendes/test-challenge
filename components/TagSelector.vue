@@ -1,5 +1,6 @@
 <template>
-  <div  class="w-full"">
+  <div  class="w-full mt-16"">
+    <h3 class="flex justify-center">Selecione as <strong class="ml-4 mr-4 mb-8"> Tags </strong>  para filtrar</h3>
     <label v-for="tag in tags" :key="tag" class="inline-block">
       <input
         type="checkbox"
